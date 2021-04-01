@@ -1,0 +1,2 @@
+# Updated Scope
+The initial scope for the database created by Dhananjay Arora, Akshay Babu, Sumit Kawale, and Prashant Madaan was to track deliveries from restaurants to locations on campus. For this project, the scope of the project is expanded to also include customer reviews of both restaurants and drivers. When a customer receives their order, they should have the ability to rate the driver and restaurant they received their order from. New procedures will also be added to the database to facilitate users viewing the ratings for a driver and restaurant.
