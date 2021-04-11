@@ -1,9 +1,11 @@
 CREATE TABLE `driver_rating` (
-  `driver_rating_id` int PRIMARY KEY AUTO_INCREMENT,
-  `rating_value` tinyint unsigned NOT NULL,
-  `order_id` int NOT NULL,
-  UNIQUE KEY `order_id_UNIQUE` (`order_id`),
-  KEY `order_fk_idx` (`order_id`),
-  CONSTRAINT `driver_rating_order_fk` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
-  CONSTRAINT `valid_driver_rating_check` CHECK ((`rating_value` >= 1) and (`rating_value` <= 5))
-) COMMENT='Tracks individual ratings for restaurants';
+  `rating_id` int NOT NULL,
+  `driver_speed_rating` tinyint unsigned DEFAULT NULL,
+  `driver_friendliness_rating` tinyint unsigned DEFAULT NULL,
+  PRIMARY KEY (`rating_id`),
+  KEY `driver_rating_subtype_fk_idx` (`rating_id`),
+  CONSTRAINT `driver_rating_subtype_fk` FOREIGN KEY (`rating_id`) REFERENCES `rating` (`rating_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `driver_friendliness_rating_range_check` CHECK (((`driver_friendliness_rating` is null) or ((`driver_friendliness_rating` >= 1) and (`driver_friendliness_rating` <= 5)))),
+  CONSTRAINT `driver_rating_value_required` CHECK (((`driver_speed_rating` is not null) or (`driver_friendliness_rating` is not null))),
+  CONSTRAINT `driver_speed_rating_range_check` CHECK (((`driver_speed_rating` is null) or ((`driver_speed_rating` >= 1) and (`driver_speed_rating` <= 5))))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Track values for driver ratings';
