@@ -1,2 +1,5 @@
 AssignmentMaterials/
 *.bak
+
+*.pyc
+.venv/
