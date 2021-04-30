@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Brief demo of ratings feature for Campus Eats database">
+    <title>Campus Eats Ratings Demo</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+    <h1>Campus Eats Ratings Demo</h1>
+
+    {% block navigation %}
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('admin_view') }}">Admin</a></li>
+            <li><a href="{{ url_for('customer_view') }}">Customer</a></li>
+        </ul>
+    </nav>
+    {% endblock navigation %}
+
+    {% block body %}
+    {% endblock %}
+</body>
+
+</html>
