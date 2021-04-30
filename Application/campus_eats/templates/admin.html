@@ -1,0 +1,60 @@
+{% extends "core.html" %}
+{% block body %}
+<h1> Welcome to Campus eats database admin view!</h1>
+
+<p>
+    This site is not intended to be a full application. It merely demonstrates a sample user interface for the
+    underlying database.
+</p>
+
+<h2>Drivers</h2>
+<table>
+    <thead>
+        <tr>
+            <td>Driver ID</td>
+            <td>Name</td>
+            <td>Average Speed Rating</td>
+            <td>Average Friendliness Rating</td>
+            <td>Rating Count</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for driver in drivers %}
+        <tr>
+            <td>{{driver.driver_id}}</td>
+            <td>{{driver.name}}</td>
+            <td>{{driver.avg_speed_rating}}</td>
+            <td>{{driver.avg_friendliness_rating}}</td>
+            <td>{{driver.num_ratings}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<h2>Restaurants</h2>
+<table>
+    <thead>
+        <tr>
+            <td>Restaurant ID</td>
+            <td>Name</td>
+            <td>Average Value Rating</td>
+            <td>Average Quality Rating</td>
+            <td>Rating Count</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for restaurant in restaurants %}
+        <tr>
+            <td>{{restaurant.restaurant_id}}</td>
+            <td>{{restaurant.name}}</td>
+            <td>{{restaurant.avg_value_rating}}</td>
+            <td>{{restaurant.avg_quality_rating}}</td>
+            <td>{{restaurant.num_ratings}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock body %}
