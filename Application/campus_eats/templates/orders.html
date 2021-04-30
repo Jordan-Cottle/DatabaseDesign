@@ -1,0 +1,73 @@
+{% extends "core.html" %}
+{% block body %}
+<h1> Welcome to Campus eats database customer view!</h1>
+
+<p>
+    This site is not intended to be a full application. It merely demonstrates a sample user interface for the
+    underlying database.
+</p>
+
+<p>
+    The table below shows the orders for the randomly logged in user. Click on "Rate driver!" or "Rate restaurant!" to
+    navigate to the rating form to add a rating. If there is already a rating, you can click on the brief text in the
+    table to go to a form to update it.
+</p>
+
+<h2>{{orders[0].person.person_name}}'s Orders</h2>
+<table>
+    <thead>
+        <tr>
+            <td>Order ID</td>
+            <td>Delivery Time</td>
+            <td>Location Name</td>
+            <td>Total Price</td>
+            <td>Delivery Charge</td>
+            <td>Driver Name</td>
+            <td>Driver Rating</td>
+            <td>Restaurant Name</td>
+            <td>Restaurant Rating</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{order.order_id}}</td>
+            <td>{{order.delivery.delivery_time}}</td>
+            <td>{{order.location.location_name}}</td>
+            <td>{{order.total_price}}</td>
+            <td>{{order.delivery_charge}}</td>
+            <td>{{order.driver.student.person.person_name}}</td>
+            <td>
+                {% if driver_ratings[order.order_id] %}
+                {% set driver_rating = driver_ratings[order.order_id] %}
+                {% else %}
+                {% set driver_rating = None %}
+                {% endif %}
+
+                {% if driver_rating %}
+                {{driver_rating.table_str()}}
+                {% else %}
+                Rate driver!
+                {% endif %}
+            </td>
+            <td>{{order.restaurant.restaurant_name}}</td>
+            <td>
+                {% if restaurant_ratings[order.order_id] %}
+                {% set restaurant_rating = restaurant_ratings[order.order_id] %}
+                {% else %}
+                {% set restaurant_rating = None %}
+                {% endif %}
+
+                {% if restaurant_rating %}
+                {{restaurant_rating.table_str()}}
+                {% else %}
+                Rate restaurant!
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock body %}
