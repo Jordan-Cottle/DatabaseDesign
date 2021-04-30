@@ -1,0 +1,22 @@
+{% extends "core.html" %}
+{% block body %}
+<h1> Welcome to Campus eats database demo!</h1>
+
+<p>
+    This site is not intended to be a full application. It merely demonstrates a sample user interface for the
+    underlying database.
+</p>
+
+<h2>Admin</h2>
+<p>
+    The admin view shows a top level view of driver and restaurant ratings so that an administrator can identify problem
+    area or places/people that are succeeding.
+</p>
+
+<h2>Customer</h2>
+<p>
+    Navigating to the customer view will automatically sign in as a random customer and present their most recent
+    orders. Clicking on one of "rate driver" or "rate restaurant" will open a form that will allow a customer to leave
+    or update their review.
+</p>
+{% endblock body %}
