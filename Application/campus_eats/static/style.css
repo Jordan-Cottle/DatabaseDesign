@@ -60,3 +60,38 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
+
+dl {
+    display: flex;
+    flex-flow: row wrap;
+    border-width: 1px 1px;
+}
+
+dt {
+    float: left;
+    clear: left;
+    flex-basis: 15%;
+    flex-shrink: 1;
+    padding: 2px 4px;
+    background:#1b90de;
+    text-align: right;
+    color: #fff;
+}
+
+dd {
+    flex-basis: 80%;
+    flex-shrink: 1;
+    margin: 0;
+    padding: 2px 4px;
+    border-bottom: 1px solid #377ba8;
+    break-after: right;
+}
+
+label {
+    display: block;
+}
+
+textarea{
+    display: block;
+    width: 40%;
+}

@@ -1,6 +1,6 @@
 import random
 
-from flask import Flask, g, render_template, request
+from flask import Flask, g, redirect, render_template, request, url_for
 from sqlalchemy.exc import SQLAlchemyError
 
 from database import (
@@ -79,8 +79,8 @@ def get_random_user():
 
 @app.route("/orders")
 def order_list():
-    # pick random user to "login" as
-    customer_id = get_random_user()
+    # pick random user to "login" if no query param specifies one
+    customer_id = request.args.get("customer_id") or get_random_user()
 
     orders = g.session.query(Order).filter_by(person_id=customer_id).all()
 
@@ -113,6 +113,54 @@ def order_list():
     )
 
 
+@app.route("/orders/<order_id>")
+def order_detail(order_id):
+    order = g.session.query(Order).filter_by(order_id=order_id).one()
+
+    driver_rating = None
+    restaurant_rating = None
+    for rating in order.rating_collection:
+        if rating.rating_type == "driver":
+            assert (
+                driver_rating is None
+            ), "Whoops, an order should have at most one rating for the driver"
+
+            driver_rating = (
+                g.session.query(DriverRating)
+                .filter_by(rating_id=rating.rating_id)
+                .one()
+            )
+        else:
+            assert (
+                restaurant_rating is None
+            ), "Whoops, an order should have at most one rating for the restaurant"
+
+            restaurant_rating = (
+                g.session.query(RestaurantRating)
+                .filter_by(rating_id=rating.rating_id)
+                .one()
+            )
+
+    return render_template(
+        "order.html",
+        order=order,
+        driver_rating=driver_rating,
+        restaurant_rating=restaurant_rating,
+    )
+
+
+@app.route("/orders/<order_id>/rate/driver", methods=["POST"])
+def rate_driver(order_id):
+    order = g.session.query(Order).filter_by(order_id=order_id).one()
+
+    return redirect(url_for("order_list", customer_id=order.person_id))
+
+
+@app.route("/orders/<order_id>/rate/restaurant", methods=["POST"])
+def rate_restaurant(order_id):
+    order = g.session.query(Order).filter_by(order_id=order_id).one()
+
+    return redirect(url_for("order_list", customer_id=order.person_id))
 
 
 if __name__ == "__main__":

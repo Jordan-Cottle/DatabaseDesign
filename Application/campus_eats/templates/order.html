@@ -1,0 +1,106 @@
+{% extends "core.html" %}
+{% block body %}
+<h1> Welcome to Campus eats order review demo!</h1>
+
+<p>
+    This site is not intended to be a full application. It merely demonstrates a sample user interface for the
+    underlying database.
+</p>
+
+{% set restaurant_name = order.restaurant.restaurant_name %}
+{% set driver_name = order.driver.student.person.person_name %}
+
+<h2>Order {{order.order_id}} Details</h2>
+<dl>
+    <dt>Order ID</dt>
+    <dd>{{order.order_id}}</dd>
+    <dt>Delivery Time</dt>
+    <dd>{{order.delivery.delivery_time.strftime("%B %d, %Y %I:%M %p")}}</dd>
+    <dt>Restaurant Name</dt>
+    <dd>{{restaurant_name}}</dd>
+    <dt>Location Name</dt>
+    <dd>{{order.location.location_name}}</dd>
+    <dt>Driver Name</dt>
+    <dd>{{driver_name}}</dd>
+    <dt>Total Price</dt>
+    <dd>{{order.total_price}}</dd>
+    <dt>Delivery Charge</dt>
+    <dd>{{order.delivery_charge}}</dd>
+</dl>
+
+<h2>Rate the restaurant for your order!</h2>
+<p>
+    We would love to hear your feedback on the restaurant that fulfilled your order.
+</p>
+<form id="restaurant_rating" action="{{url_for('rate_restaurant', order_id=order.order_id)}}" method="POST">
+    {% if restaurant_rating %}
+    {% set default_value = restaurant_rating.restaurant_value_rating or 3 %}
+    {% set default_quality = restaurant_rating.restaurant_quality_rating or 3 %}
+    {% set default_comment = restaurant_rating.rating_comment or '' %}
+    {% else %}
+    {% set default_value = 3 %}
+    {% set default_quality = 3 %}
+    {% set default_comment = '' %}
+    {% endif %}
+
+    <label>
+        {{restaurant_name}}'s Value:
+        <input class="rating" type="range" min="1" max="5" value="{{default_value}}" name="value"
+            list="rating_options" />
+    </label>
+    <label>
+        {{restaurant_name}}'s Quality:
+        <input class="rating" type="range" min="1" max="5" value="{{default_quality}}" name="quality"
+            list="rating_options" />
+    </label>
+
+    <label class="textarea">
+        Additional thoughts about {{restaurant_name}}
+        <textarea name="comment" rows="8" cols="30"
+            placeholder="Enter any additional comments here">{{default_comment}}</textarea>
+    </label>
+    <input type="submit">
+</form>
+
+<h2>Rate the driver for your order!</h2>
+<p>
+    We would love to hear your feedback on the driver who delivered your order.
+</p>
+<form id="driver_rating" action="{{url_for('rate_driver', order_id=order.order_id)}}" method="POST">
+    {% if driver_rating %}
+    {% set default_speed = driver_rating.driver_speed_rating %}
+    {% set default_friendliness = driver_rating.driver_friendliness_rating %}
+    {% set default_comment = driver_rating.rating_comment or '' %}
+    {% else %}
+    {% set default_speed = 3 %}
+    {% set default_friendliness = 3 %}
+    {% set default_comment = '' %}
+    {% endif %}
+    <label>
+        {{driver_name}}'s Speed:
+        <input class="rating" type="range" min="1" max="5" value="{{default_speed}}" name="speed"
+            list="rating_options" />
+    </label>
+    <label>
+        {{driver_name}}'s Friendliness:
+        <input class="rating" type="range" min="1" max="5" value="{{default_friendliness}}" name="friendliness"
+            list="rating_options" />
+    </label>
+
+    <label class="textarea">
+        Additional thoughts about {{driver_name}}
+        <textarea name="comment" rows="8" cols="30"
+            placeholder="Enter any additional comments here">{{default_comment}}</textarea>
+    </label>
+    <input type="submit">
+</form>
+
+<datalist id="rating_options">
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+</datalist>
+
+{% endblock body %}
