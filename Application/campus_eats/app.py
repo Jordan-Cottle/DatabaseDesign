@@ -78,7 +78,7 @@ def get_random_user():
 
 
 @app.route("/orders")
-def customer_view():
+def order_list():
     # pick random user to "login" as
     customer_id = get_random_user()
 
