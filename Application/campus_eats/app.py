@@ -1,15 +1,22 @@
 import random
 
-from flask import Flask, render_template, g
+from flask import Flask, g, render_template, request
 from sqlalchemy.exc import SQLAlchemyError
 
-from database import Session, DriverRating, RestaurantRating, Order
+from database import (
+    DriverRating,
+    Order,
+    RestaurantRating,
+    Session,
+)
 
 app = Flask(__name__)
+
 
 @app.before_request
 def inject_session():
     g.session = Session()
+
 
 @app.after_request
 def close_session(response):
@@ -33,7 +40,7 @@ AVG_DRIVER_COLS = [
     "name",
     "avg_speed_rating",
     "avg_friendliness_rating",
-    "num_ratings"
+    "num_ratings",
 ]
 
 AVG_RESTAURANT_COLS = [
@@ -41,29 +48,34 @@ AVG_RESTAURANT_COLS = [
     "name",
     "avg_value_rating",
     "avg_quality_rating",
-    "num_ratings"
+    "num_ratings",
 ]
+
 
 @app.route("/admin")
 def admin_view():
-    """ Query aggregated data from database. """
+    """Query aggregated data from database."""
     driver_data = g.session.execute("select * from avg_driver_ratings").fetchall()
-    drivers = [
-        dict(zip(AVG_DRIVER_COLS, driver)) for driver in driver_data
-    ]
+    drivers = [dict(zip(AVG_DRIVER_COLS, driver)) for driver in driver_data]
 
-    restaurant_data = g.session.execute("select * from avg_restaurant_ratings").fetchall()
+    restaurant_data = g.session.execute(
+        "select * from avg_restaurant_ratings"
+    ).fetchall()
     restaurants = [
         dict(zip(AVG_RESTAURANT_COLS, restaurant)) for restaurant in restaurant_data
     ]
 
     return render_template("admin.html", drivers=drivers, restaurants=restaurants)
 
+
 def get_random_user():
-    """ Pick a random user to login. """
-    customers_with_orders = g.session.execute("select distinct person_id from `order`").fetchall()
+    """Pick a random user to login."""
+    customers_with_orders = g.session.execute(
+        "select distinct person_id from `order`"
+    ).fetchall()
 
     return random.choice(customers_with_orders)[0]
+
 
 @app.route("/orders")
 def customer_view():
@@ -81,11 +93,26 @@ def customer_view():
     for rating in ratings:
         order_id = rating.order_id
         if rating.rating_type == "driver":
-            driver_ratings[order_id] = g.session.query(DriverRating).filter_by(rating_id=rating.rating_id).one()
+            driver_ratings[order_id] = (
+                g.session.query(DriverRating)
+                .filter_by(rating_id=rating.rating_id)
+                .one()
+            )
         else:
-            restaurant_ratings[order_id] = g.session.query(RestaurantRating).filter_by(rating_id=rating.rating_id).one()
+            restaurant_ratings[order_id] = (
+                g.session.query(RestaurantRating)
+                .filter_by(rating_id=rating.rating_id)
+                .one()
+            )
 
-    return render_template("orders.html", orders=orders, driver_ratings=driver_ratings, restaurant_ratings=restaurant_ratings)
+    return render_template(
+        "orders.html",
+        orders=orders,
+        driver_ratings=driver_ratings,
+        restaurant_ratings=restaurant_ratings,
+    )
+
+
 
 
 if __name__ == "__main__":
