@@ -8,6 +8,8 @@ from database import (
     Order,
     RestaurantRating,
     Session,
+    add_driver_rating,
+    add_restaurant_rating,
 )
 
 app = Flask(__name__)
@@ -153,12 +155,24 @@ def order_detail(order_id):
 def rate_driver(order_id):
     order = g.session.query(Order).filter_by(order_id=order_id).one()
 
+    speed_rating = request.form.get("speed")
+    friendliness_rating = request.form.get("friendliness")
+    comment = request.form.get("comment") or None
+
+    add_driver_rating(order_id, speed_rating, friendliness_rating, comment)
+
     return redirect(url_for("order_list", customer_id=order.person_id))
 
 
 @app.route("/orders/<order_id>/rate/restaurant", methods=["POST"])
 def rate_restaurant(order_id):
     order = g.session.query(Order).filter_by(order_id=order_id).one()
+
+    value_rating = request.form.get("value")
+    quality_rating = request.form.get("quality")
+    comment = request.form.get("comment") or None
+
+    add_restaurant_rating(order_id, value_rating, quality_rating, comment)
 
     return redirect(url_for("order_list", customer_id=order.person_id))
 
