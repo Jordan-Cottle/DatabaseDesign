@@ -3,3 +3,5 @@ AssignmentMaterials/
 
 *.pyc
 .venv/
+config.py
+.vscode/
