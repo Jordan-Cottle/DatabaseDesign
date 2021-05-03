@@ -11,7 +11,7 @@
     - [driver](../../Views/driver_reviews.sql) & [restaurant](../../Views/restaurant_reviews.sql) reviews views
         - View to present relevant data for each rating.
 - [Indexes](indexes.md)
-- [Overall Report](report.mp4)
+- [Overall Report](https://youtu.be/4VNddRiRrlM)
 - [User Interface](http://lanparty.mynetgear.com:3000)
     - [Source code](../../Application)
 - [Full database Export](database_dump.sql)
