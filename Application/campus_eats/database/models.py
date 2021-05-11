@@ -18,10 +18,8 @@ class DriverRating(Rating):
     def table_str(self):
         """ Generate a string to place in the table when viewed as part of the customer order report. """
         if self.rating_comment:
-            return (
-                self.rating_comment[:30] + "..."
-                if len(self.rating_comment) > 30
-                else ""
+            return self.rating_comment[:30] + (
+                "..." if len(self.rating_comment) > 30 else ""
             )
         else:
             items = []
